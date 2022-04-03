@@ -19,29 +19,34 @@ import javax.inject.Inject
 class SearchViewModel @Inject constructor(
     private val searchRepository: SearchRepository
 ): ViewModel() {
-    val _searchResponse: MutableLiveData<SearchResponse> = MutableLiveData()
-    private val searchResponse: LiveData<SearchResponse>
+    val _searchResponse: MutableLiveData<Resource<SearchResponse>> = MutableLiveData()
+    private val searchResponse: LiveData<Resource<SearchResponse>>
         get() = _searchResponse
 
     @FlowPreview
     fun search(q: String) = viewModelScope.launch {
+        _searchResponse.postValue(Resource.Loading)
         searchRepository.search(q)
             .debounce(300)
             .distinctUntilChanged()
             .collect {
-            handleResponse(it)
-            Log.d("nacm", "search: " + it.body()!!.items[0].login)
+                _searchResponse.value = it
+//            handleResponse(it)
         }
     }
 
-    private fun handleResponse(response: Response<SearchResponse>) {
+    private fun handleResponse(response: Resource<Response<SearchResponse>>) {
+
+    }
+
+    /*private fun handleResponse(response: Response<SearchResponse>) {
         Log.i("nacm", "handleResponse: isSuccessful: " + response.isSuccessful)
         if (response.isSuccessful)
-            _searchResponse.value = response.body()
+            _searchResponse.value = Resource.Success(response.body())
         else {
             Log.i("nacm", "handleResponse: is not ok cause: " + response.code())
             if (response.code() == 403)
                 _searchResponse.value = null
         }
-    }
+    }*/
 }

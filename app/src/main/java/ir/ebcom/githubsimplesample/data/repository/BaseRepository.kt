@@ -15,7 +15,7 @@ abstract class BaseRepository {
     ) : Flow<Resource<T>>{
         return flow {
             try {
-                emit(Resource.Loading(Resource.Status.LOADING))
+                emit(Resource.Loading)
                 emit(Resource.Success(apiCall.invoke()))
             }catch (throwable: Throwable){
                 when(throwable){

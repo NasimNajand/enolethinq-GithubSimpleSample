@@ -9,12 +9,12 @@ class SearchRepository @Inject constructor(
 
     suspend fun search(
         query: String
-    ) = safeApiCall {
+    ) = safeApiCallByFlow {
         api.searchUserByQuery(query)
     }
     suspend fun fetchSingleUser(
         name: String
-    ) = safeApiCall {
+    ) = safeApiCallByFlow {
         api.getSingleUser(name)
     }
 }
