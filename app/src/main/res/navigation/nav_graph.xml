@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:startDestination="@id/navigation_search"
+    android:id="@+id/nav_graph">
+
+    <fragment
+        android:id="@+id/navigation_search"
+        android:name="ir.ebcom.githubsimplesample.data.view.search.SearchFragment"
+        android:label="SearchFragment">
+
+<!--        <action android:id="@+id/action_search_fragment"/>-->
+        <action
+            android:id="@+id/action_navigation_search_to_navigation_user"
+            app:destination="@id/navigation_user" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_user"
+        android:name="ir.ebcom.githubsimplesample.data.view.user.UserFragment"
+        android:label="UserFragment">
+        <argument
+            android:name="usernameArg"
+            app:argType="string"
+            android:defaultValue="enolethinq"/>
+
+    </fragment>
+
+</navigation>
