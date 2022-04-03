@@ -67,7 +67,12 @@ class SearchFragment: BaseFragment<SearchViewModel, FragmentSearchBinding>()
                         adapter.setOnSelectedListener(listener)
                     }
                     is Resource.Failure -> {
-                        Toast.makeText(requireContext(), "API rate limit exceeded!", Toast.LENGTH_SHORT).show()
+                        Log.i("nacm", "onViewCreated: fail called")
+                        if (it.errorCode == 403)
+                            Toast.makeText(requireContext(), "API rate limit exceeded!", Toast.LENGTH_SHORT).show()
+                        else
+                            Toast.makeText(requireContext(), "No Data!", Toast.LENGTH_SHORT).show()
+                        binding.progressbar.visibility = GONE
                         binding.searchRv.visibility = GONE
                     }
                 }

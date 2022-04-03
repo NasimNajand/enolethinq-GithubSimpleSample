@@ -31,22 +31,6 @@ class SearchViewModel @Inject constructor(
             .distinctUntilChanged()
             .collect {
                 _searchResponse.value = it
-//            handleResponse(it)
         }
     }
-
-    private fun handleResponse(response: Resource<Response<SearchResponse>>) {
-
-    }
-
-    /*private fun handleResponse(response: Response<SearchResponse>) {
-        Log.i("nacm", "handleResponse: isSuccessful: " + response.isSuccessful)
-        if (response.isSuccessful)
-            _searchResponse.value = Resource.Success(response.body())
-        else {
-            Log.i("nacm", "handleResponse: is not ok cause: " + response.code())
-            if (response.code() == 403)
-                _searchResponse.value = null
-        }
-    }*/
 }
