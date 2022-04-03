@@ -23,7 +23,6 @@ class SearchFragment: BaseFragment<SearchViewModel, FragmentSearchBinding>()
 {
     @Inject
     lateinit var searchViewModel: SearchViewModel
-    lateinit var fragmentSearchBinding: FragmentSearchBinding
     override fun getViewModel(): SearchViewModel {
         return searchViewModel
     }
@@ -39,6 +38,8 @@ class SearchFragment: BaseFragment<SearchViewModel, FragmentSearchBinding>()
         binding.searchEt.doOnTextChanged { text, _, _, _ ->
             if(text!!.length > 2)
                 searchViewModel.search(text.toString())
+            else
+                binding.searchRv.visibility = GONE
         }
         searchViewModel._searchResponse.observe(viewLifecycleOwner){
             if (it != null){

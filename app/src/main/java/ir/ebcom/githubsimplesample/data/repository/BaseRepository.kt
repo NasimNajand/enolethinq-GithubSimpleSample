@@ -28,6 +28,7 @@ abstract class BaseRepository {
             }
         }.flowOn(Dispatchers.IO)
     }
+
     suspend fun <T> safeApiCall(
         apiCall: suspend () -> T
     ) = flow {

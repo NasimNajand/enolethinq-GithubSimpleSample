@@ -9,9 +9,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import ir.ebcom.githubsimplesample.data.response.SearchResponse
 import ir.ebcom.githubsimplesample.data.network.Resource
 import ir.ebcom.githubsimplesample.data.repository.SearchRepository
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import retrofit2.Response
 import javax.inject.Inject
@@ -24,8 +23,12 @@ class SearchViewModel @Inject constructor(
     private val searchResponse: LiveData<SearchResponse>
         get() = _searchResponse
 
+    @FlowPreview
     fun search(q: String) = viewModelScope.launch {
-        searchRepository.search(q).collect {
+        searchRepository.search(q)
+            .debounce(300)
+            .distinctUntilChanged()
+            .collect {
             handleResponse(it)
             Log.d("nacm", "search: " + it.body()!!.items[0].login)
         }
