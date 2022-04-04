@@ -24,6 +24,7 @@ class SearchFragment: BaseFragment<SearchViewModel, FragmentSearchBinding>()
 {
     @Inject
     lateinit var searchViewModel: SearchViewModel
+    private var isRatelimited: Boolean = false
     override fun getViewModel(): SearchViewModel {
         return searchViewModel
     }
@@ -37,7 +38,7 @@ class SearchFragment: BaseFragment<SearchViewModel, FragmentSearchBinding>()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.searchEt.doOnTextChanged { text, _, _, _ ->
-            if(text!!.length > 2)
+            if(text!!.length > 2 && !isRatelimited)
                 searchViewModel.search(text.toString())
             else
                 binding.searchRv.visibility = GONE
@@ -68,8 +69,9 @@ class SearchFragment: BaseFragment<SearchViewModel, FragmentSearchBinding>()
                     }
                     is Resource.Failure -> {
                         Log.i("nacm", "onViewCreated: fail called")
+                        isRatelimited = true
                         if (it.errorCode == 403)
-                            Toast.makeText(requireContext(), "API rate limit exceeded!", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(requireContext(), "API rate limit exceeded! Try later.", Toast.LENGTH_SHORT).show()
                         else
                             Toast.makeText(requireContext(), "No Data!", Toast.LENGTH_SHORT).show()
                         binding.progressbar.visibility = GONE
