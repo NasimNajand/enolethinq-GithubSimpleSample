@@ -22,7 +22,7 @@ class ResultAdapter(val list: SearchResponse): RecyclerView.Adapter<ResultAdapte
     override fun onBindViewHolder(holder: ResultViewHolder, position: Int) {
         holder.binging.nameTv.text = "name: " + list.items[position].login
         holder.binging.scoreTv.text = """score: ${list.items[position].score}"""
-        holder.binging.nameTv.setOnClickListener(View.OnClickListener {
+        holder.binging.resultCv.setOnClickListener(View.OnClickListener {
             if (listener != null && position != RecyclerView.NO_POSITION)
                 listener.setOnSelectedListener(list.items[position].login)
         })

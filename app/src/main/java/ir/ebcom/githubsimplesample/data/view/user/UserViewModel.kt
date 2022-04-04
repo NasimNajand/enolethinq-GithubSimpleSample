@@ -1,5 +1,6 @@
 package ir.ebcom.githubsimplesample.data.view.user
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -25,5 +26,10 @@ class UserViewModel @Inject constructor(
         repository.fetchSingleUser(name).collect {
             _userResponse.value = it
         }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        Log.i("UserVM", "onCleared: called")
     }
 }
