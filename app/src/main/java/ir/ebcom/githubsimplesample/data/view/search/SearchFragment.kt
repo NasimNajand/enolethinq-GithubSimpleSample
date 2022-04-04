@@ -42,6 +42,8 @@ class SearchFragment: BaseFragment<SearchViewModel, FragmentSearchBinding>()
                 searchViewModel.search(text.toString())
             else
                 binding.searchRv.visibility = GONE
+            if (text.isEmpty())
+                isRatelimited = false
         }
         searchViewModel._searchResponse.observe(viewLifecycleOwner){
             if (it != null){
