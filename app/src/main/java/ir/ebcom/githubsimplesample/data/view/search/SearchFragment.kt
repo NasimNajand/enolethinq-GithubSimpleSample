@@ -37,8 +37,8 @@ class SearchFragment: BaseFragment<SearchViewModel, FragmentSearchBinding>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.searchEt.doOnTextChanged { text, _, _, _ ->
-            if(text!!.length > 2 && !isRatelimited)
+        binding.searchEt.doOnTextChanged { text, start, _, _ ->
+            if(text!!.length > 2 && !isRatelimited && start != 0)
                 searchViewModel.search(text.toString())
             else
                 binding.searchRv.visibility = GONE
