@@ -10,8 +10,8 @@ import retrofit2.http.Query
 interface SearchApi {
 
     @GET("search/users")
-    suspend fun searchUserByQuery(@Query("q") q: String) : SearchResponse
+    suspend fun searchUserByQuery(@Query("q") q: String) : Response<SearchResponse>
 
     @GET("users/{username}")
-    suspend fun getSingleUser(@Path("username") userName: String): SingleUser
+    suspend fun getSingleUser(@Path("username") userName: String): Response<SingleUser>
 }

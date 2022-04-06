@@ -9,19 +9,20 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import ir.ebcom.githubsimplesample.data.response.SearchResponse
 import ir.ebcom.githubsimplesample.data.network.Resource
 import ir.ebcom.githubsimplesample.data.repository.SearchRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import retrofit2.Response
+import java.lang.IllegalArgumentException
 import javax.inject.Inject
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
     private val searchRepository: SearchRepository
 ): ViewModel() {
-    val _searchResponse: MutableLiveData<Resource<SearchResponse>> = MutableLiveData()
-    private val searchResponse: LiveData<Resource<SearchResponse>>
-        get() = _searchResponse
+    private val _searchResponse: MutableLiveData<Resource<SearchResponse>> = MutableLiveData()
+    val searchResponse: LiveData<Resource<SearchResponse>> = _searchResponse
 
     @FlowPreview
     fun search(q: String) = viewModelScope.launch {
@@ -29,8 +30,15 @@ class SearchViewModel @Inject constructor(
         searchRepository.search(q)
             .debounce(300)
             .distinctUntilChanged()
+            .catch { e ->
+                Log.e("SearchVM", "search: " + e.localizedMessage)
+            }
             .collect {
-                _searchResponse.value = it
+                _searchResponse.postValue(it)
         }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
     }
 }

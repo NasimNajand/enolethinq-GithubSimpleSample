@@ -9,6 +9,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import ir.ebcom.githubsimplesample.data.network.Resource
 import ir.ebcom.githubsimplesample.data.repository.SearchRepository
 import ir.ebcom.githubsimplesample.data.response.SingleUser
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import retrofit2.Response
 import javax.inject.Inject
@@ -17,19 +19,12 @@ import javax.inject.Inject
 class UserViewModel @Inject constructor(
     private val repository: SearchRepository
 ): ViewModel() {
-    val _userResponse: MutableLiveData<Resource<SingleUser>> = MutableLiveData()
-    private val userResponse: LiveData<Resource<SingleUser>>
-        get() = _userResponse
+    private val _userResponse: MutableLiveData<Resource<SingleUser>> = MutableLiveData()
+    val userResponse: LiveData<Resource<SingleUser>> = _userResponse
 
     fun fetchUser(name: String) = viewModelScope.launch {
-        _userResponse.postValue(Resource.Loading)
         repository.fetchSingleUser(name).collect {
-            _userResponse.value = it
+            _userResponse.postValue(it)
         }
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        Log.i("UserVM", "onCleared: called")
     }
 }

@@ -10,6 +10,7 @@ import ir.ebcom.githubsimplesample.data.network.SearchApi
 import ir.ebcom.githubsimplesample.utils.AppConstants
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -21,6 +22,7 @@ object NetworkModule {
     }
 
     @Provides
+    @Singleton
     internal fun provideRetrofit(): Retrofit {
         return Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
@@ -29,6 +31,7 @@ object NetworkModule {
     }
 
     @Provides
+    @Singleton
     internal fun provideSearchApi(retrofit: Retrofit): SearchApi{
         return retrofit.create(SearchApi::class.java)
     }
